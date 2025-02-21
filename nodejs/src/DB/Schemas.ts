@@ -14,7 +14,7 @@ const MessageSender = {
 
 // User Schema
 const UserSchema = new Schema({
-	id: { type: String, required: true, unique: true },
+	_id: { type: String, required: true, unique: true },
 	name: { type: String, required: true },
 	logo: { type: String },
 	rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
@@ -23,14 +23,14 @@ const UserSchema = new Schema({
 
 // AI Schema
 const AISchema = new Schema({
-	id: { type: String, required: true, unique: true },
+	_id: { type: String, required: true, unique: true },
 	name: { type: String, required: true },
 	logo: { type: String },
 });
 
 // Room Schema
 const RoomSchema = new Schema({
-	id: { type: String, required: true, unique: true },
+	_id: { type: String, required: true, unique: true },
 	name: { type: String, required: true },
 	members: [
 		{
@@ -43,6 +43,7 @@ const RoomSchema = new Schema({
 
 // Message Schema
 const MessageSchema = new Schema({
+	_id: { type: String, required: true, unique: true },
 	sender: { type: Schema.Types.Mixed, required: true }, // Can be User or AI
 	senderType: {
 		type: Number,

@@ -27,12 +27,13 @@ declare global {
 		ADMIN = 2,
 	}
 
-	type Message = Array<{
-		sender: User | AI;
+	type Message = {
+		id: string;
+		sender: string; // AI OR USER id
 		senderType: MessageSender;
 		content: string;
 		createdAt: Date;
-	}>;
+	};
 	var Message: Message;
 	enum MessageSender {
 		USER = 0,

@@ -6,7 +6,8 @@ import { Server } from "socket.io";
 import { SocketManager } from "./Managers/SocketManager/SocketManager";
 import cookieParser from "cookie-parser";
 
-import { register_user } from "./controllers/auth.controllers";
+import { auth_filter, register_user } from "./controllers/auth.controllers";
+import { create_room, join_room } from "./controllers/room.controllers";
 
 config();
 const { PORT, API_KEY } = process.env;
@@ -27,4 +28,5 @@ server.listen(PORT, () => {
 // });
 
 app.post("/auth/register", register_user);
-app.get("/room/create");
+app.get("/room/create/:name", auth_filter, create_room);
+app.get("/room/join/:room_id", auth_filter, join_room);
