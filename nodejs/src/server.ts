@@ -5,7 +5,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { SocketManager } from "./Managers/SocketManager/SocketManager";
 import cookieParser from "cookie-parser";
-
+import cors from "cors";
 import { auth_filter, register_user } from "./controllers/auth.controllers";
 import { create_room, join_room } from "./controllers/room.controllers";
 
@@ -14,14 +14,14 @@ const { PORT, API_KEY } = process.env;
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use(cookieParser());
-
 const server = createServer(app);
 
 const io = new Server(server);
 SocketManager.init(io);
 server.listen(PORT, () => {
-	log("express & socket.io at", PORT);
+    log("express & socket.io at", PORT);
 });
 // connect_mongo().then(() => {
 
