@@ -18,7 +18,7 @@ const UserSchema = new Schema({
 	name: { type: String, required: true },
 	logo: { type: String },
 	rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
-	password: { type: String, required: true },
+	hashedPassword: { type: String, required: true },
 });
 
 // AI Schema

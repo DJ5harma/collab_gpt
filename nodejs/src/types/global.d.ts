@@ -4,7 +4,6 @@ declare global {
 		name: string;
 		logo: string;
 		rooms: Array<Room>;
-		password: string;
 	}
 	var User: User;
 

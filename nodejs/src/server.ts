@@ -4,19 +4,27 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { SocketManager } from "./Managers/SocketManager/SocketManager";
-import connect_mongo from "./DB/connect_mongo";
+import cookieParser from "cookie-parser";
+
+import { register_user } from "./controllers/auth.controllers";
 
 config();
 const { PORT, API_KEY } = process.env;
 
 const app = express();
+app.use(express.json());
+app.use(cookieParser());
+
 const server = createServer(app);
 
-connect_mongo().then(() => {
-	const io = new Server(server);
-	SocketManager.init(io);
-
-	server.listen(PORT, () => {
-		log("express & socket.io at", PORT);
-	});
+const io = new Server(server);
+SocketManager.init(io);
+server.listen(PORT, () => {
+	log("express & socket.io at", PORT);
 });
+// connect_mongo().then(() => {
+
+// });
+
+app.post("/auth/register", register_user);
+app.get("/room/create");
