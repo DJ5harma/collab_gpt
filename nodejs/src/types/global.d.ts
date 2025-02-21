@@ -4,6 +4,7 @@ declare global {
 		name: string;
 		logo: string;
 		rooms: Array<Room>;
+		password: string;
 	}
 	var User: User;
 
@@ -18,7 +19,7 @@ declare global {
 		id: string;
 		name: string;
 		members: Array<{ user: User; access: RoomAccess }>;
-		chat_history: ChatHistory;
+		chat_history: Message[];
 	}
 	var Room: Room;
 	enum RoomAccess {
@@ -27,13 +28,13 @@ declare global {
 		ADMIN = 2,
 	}
 
-	type ChatHistory = Array<{
+	type Message = Array<{
 		sender: User | AI;
 		senderType: MessageSender;
 		content: string;
 		createdAt: Date;
 	}>;
-	var ChatHistory: ChatHistory;
+	var Message: Message;
 	enum MessageSender {
 		USER = 0,
 		AI = 1,
