@@ -16,6 +16,7 @@ declare global {
     var AI: AI;
 
     interface Room {
+        id: string;
         name: string;
         members: Array<{ user: User; access: RoomAccess }>;
         chat_history: Message[];
@@ -28,11 +29,11 @@ declare global {
         ADMIN = 2,
     }
 
-    type Message = {
+    interface Message {
         sender_name: string; // AI OR USER _id
         content: string;
         createdAt: Date;
-    };
+    }
     var Message: Message;
 }
 

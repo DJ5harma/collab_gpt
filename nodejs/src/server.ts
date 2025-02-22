@@ -1,4 +1,4 @@
-import { error } from "console";
+import { error, log } from "console";
 import { config } from "dotenv";
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
@@ -10,7 +10,7 @@ config();
 const PORT = Number(process.env.PORT);
 const JWT_SECRET = process.env.JWT_SECRET!;
 
-const io = new Server();
+const io = new Server({ cors: { origin: "http://localhost:3000" } });
 io.listen(PORT!);
 
 //-------------------------
@@ -56,6 +56,8 @@ const verify = (token: string) => {
 };
 
 io.on("connection", (socket) => {
+    log(socket.id, "connected");
+
     socket.on("REGISTER", (username: string) => {
         if (username_to_user.has(username))
             return socket.emit("error", "username already present");
@@ -84,7 +86,8 @@ io.on("connection", (socket) => {
         const room_id = randomUUID();
 
         const access = RoomAccess.ADMIN;
-        const room = {
+        const room: Room = {
+            id: room_id,
             name: name || `Untitled ${new Date()}`,
             members: [{ user, access }],
             chat_history: [],
@@ -103,21 +106,24 @@ io.on("connection", (socket) => {
         const user = verify(token);
         if (!user) return;
 
-        for (let i = 0; i < room.members.length; ++i) {
-            if (room.members[i].user === user) {
-                const access = room.members[i].access;
+        // for (let i = 0; i < room.members.length; ++i) {
+        //     if (room.members[i].user === user) {
+        //         const access = room.members[i].access;
 
-                user.socket.join(room_id);
-                user.socket.emit("JOINED-ROOM", [sendable({ room }), access]);
-                user.rooms.push(room);
-                return;
-            }
-        }
+        //         user.socket.join(room_id);
+        //         user.socket.emit("JOINED-ROOM", [sendable({ room }), access]);
+        //         user.rooms.push(room);
+        //         return;
+        //     }
+        // }
 
         room.members
             .filter(({ access }) => access === RoomAccess.ADMIN)
             .forEach((member) => {
-                member.user.socket.emit("JOIN-REQUEST", sendable({ user }));
+                member.user.socket.emit("JOIN-REQUEST", [
+                    room_id,
+                    sendable({ user }),
+                ]);
             });
 
         room.join_requesters.push(user);
