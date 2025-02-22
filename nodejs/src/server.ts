@@ -15,12 +15,12 @@ import { create_room, join_room } from "./controllers/room.controllers";
 import connect_mongo from "./DB/connect_mongo";
 
 config();
-const { PORT, API_KEY, CLIEENT_URL } = process.env;
+const { PORT, API_KEY, CLIENT_URL } = process.env;
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: CLIEENT_URL, credentials: true }));
+app.use(cors({ origin: CLIENT_URL, credentials: true }));
 const server = createServer(app);
 
 const io = new Server(server);
