@@ -43,16 +43,18 @@ const RoomSchema = new Schema({
 });
 
 // Message Schema
-const MessageSchema = new Schema({
-    sender: { type: Schema.Types.Mixed, required: true }, // Can be User or AI
-    senderType: {
-        type: Number,
-        enum: Object.values(MessageSender),
-        required: true,
+const MessageSchema = new Schema(
+    {
+        sender: { type: Schema.Types.Mixed, required: true }, // Can be User or AI
+        senderType: {
+            type: Number,
+            enum: Object.values(MessageSender),
+            required: true,
+        },
+        content: { type: String, required: true },
     },
-    content: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
-});
+    { timestamps: true }
+);
 
 // Mongoose Models
 const user_schema = model("User", UserSchema);

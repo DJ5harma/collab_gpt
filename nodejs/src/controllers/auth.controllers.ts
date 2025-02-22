@@ -90,7 +90,10 @@ export const fill_user = async (
         });
         return;
     }
-    req.user = await user_schema.findById(user_id, { hashedPassword: 0 });
+    req.user = await user_schema.findById(user_id, {
+        hashedPassword: 0,
+        rooms: 0,
+    });
 
     if (!req.user) {
         res.json({

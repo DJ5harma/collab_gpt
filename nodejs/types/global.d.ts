@@ -1,6 +1,6 @@
 declare global {
     interface User {
-        id: string;
+        _id: string;
         name: string;
         logo: string;
         rooms: Array<Room>;
@@ -8,14 +8,14 @@ declare global {
     var User: User;
 
     interface AI {
-        id: string;
+        _id: string;
         name: string;
         logo: string;
     }
     var AI: AI;
 
     interface Room {
-        id: string;
+        _id: string;
         name: string;
         members: Array<{ user: User; access: RoomAccess }>;
         chat_history: Message[];
@@ -28,8 +28,8 @@ declare global {
     }
 
     type Message = {
-        id: string;
-        sender: string; // AI OR USER id
+        _id: string;
+        sender: string; // AI OR USER _id
         senderType: MessageSender;
         content: string;
         createdAt: Date;

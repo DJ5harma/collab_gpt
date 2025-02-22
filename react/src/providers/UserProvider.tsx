@@ -8,7 +8,7 @@ import {
 } from "react";
 
 const sampleUser = {
-    id: "",
+    _id: "",
     logo: "",
     name: "",
     rooms: [],

@@ -20,7 +20,7 @@ export class SocketManager {
 
             socket.on(
                 "accepted-room-join-request",
-                ({
+                async ({
                     room_id,
                     user,
                     joiner_access,
@@ -29,17 +29,16 @@ export class SocketManager {
                     user: User;
                     joiner_access: RoomAccess;
                 }) => {
-                    RoomsManager.get_room(room_id)
-                        ?.members.filter(
-                            ({ access }) => access === RoomAccess.ADMIN
-                        )
+                    const rm = await RoomsManager.get_room(room_id);
+                    rm.members
+                        .filter(({ access }) => access === RoomAccess.ADMIN)
                         .forEach((member) => {
                             if (
                                 socket ===
-                                this.userid_to_socket.get(member.user.id)
+                                this.userid_to_socket.get(member.user._id)
                             ) {
                                 this.userid_to_socket
-                                    .get(user.id)
+                                    .get(user._id)
                                     ?.join(room_id);
                                 RoomsManager.add_user_to_room(
                                     user,
@@ -54,7 +53,7 @@ export class SocketManager {
 
             socket.on(
                 "send-message",
-                ({
+                async ({
                     user_id,
                     content,
                     room_id,
@@ -63,14 +62,15 @@ export class SocketManager {
                     content: string;
                     room_id: string;
                 }) => {
-                    RoomsManager.get_room(room_id)
-                        ?.members.filter(
+                    const rm = await RoomsManager.get_room(room_id);
+                    rm?.members
+                        .filter(
                             ({ access }) =>
                                 access === RoomAccess.ADMIN ||
                                 access === RoomAccess.WRITE
                         )
                         .forEach((member) => {
-                            if (member.user.id === user_id) {
+                            if (member.user?._id === user_id) {
                                 const senderType =
                                     member.access === RoomAccess.ADMIN
                                         ? MessageSender.ADMIN
@@ -94,12 +94,14 @@ export class SocketManager {
         });
     }
 
-    static emit_join_room_request(room: Room, user: User) {
-        room.members
+    static async emit_join_room_request(room_id: string, user: User) {
+        const room = await RoomsManager.get_room(room_id);
+        if (!room) return;
+        room?.members
             .filter(({ access }) => access === RoomAccess.ADMIN)
             .forEach((member) => {
                 this.userid_to_socket
-                    .get(member.user.id)
+                    .get(member.user._id)
                     ?.emit("room-join-request", user);
             });
     }
