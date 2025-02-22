@@ -1,24 +1,25 @@
+import { Socket } from "socket.io";
+
 declare global {
     interface User {
-        _id: string;
         name: string;
         logo: string;
         rooms: Array<Room>;
+        socket: Socket;
     }
     var User: User;
 
     interface AI {
-        _id: string;
         name: string;
         logo: string;
     }
     var AI: AI;
 
     interface Room {
-        _id: string;
         name: string;
         members: Array<{ user: User; access: RoomAccess }>;
         chat_history: Message[];
+        join_requesters: User[];
     }
     var Room: Room;
     enum RoomAccess {
@@ -28,18 +29,11 @@ declare global {
     }
 
     type Message = {
-        _id: string;
-        sender: string; // AI OR USER _id
-        senderType: MessageSender;
+        sender_name: string; // AI OR USER _id
         content: string;
         createdAt: Date;
     };
     var Message: Message;
-    enum MessageSender {
-        USER = 0,
-        AI = 1,
-        ADMIN = 2,
-    }
 }
 
 export {};

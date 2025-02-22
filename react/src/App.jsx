@@ -1,35 +1,8 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import WelcomeScreen from "./components/WelcomeScreen/WelcomeScreen";
 import Home from "./components/Home/Home";
-import { useEffect } from "react";
-import { useUser } from "./providers/UserProvider";
-import { auth_api } from "./utils/axios";
-import toast from "react-hot-toast";
 
 function App() {
-    const { setUser } = useUser();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const userStored = localStorage.getItem("user");
-        if (userStored) {
-            const userJson = JSON.parse(userStored);
-            setUser(userJson);
-            return;
-        }
-        auth_api.get("/updated_user").then(({ data }) => {
-            console.log(data);
-            if (data.error) {
-                toast.error(data.error);
-                navigate({ pathname: "/welcome" });
-                return;
-            }
-            setUser(data.user);
-            toast(data.message);
-            navigate({ pathname: "/" });
-        });
-    }, []);
-
     return (
         <div className="w-screen h-screen border-2 border-red-500 flex justify-center items-center">
             <Routes>
