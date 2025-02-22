@@ -1,57 +1,57 @@
 import { Schema, model } from "mongoose";
 
 const RoomAccess = {
-	READ: 0,
-	WRITE: 1,
-	ADMIN: 2,
+    READ: 0,
+    WRITE: 1,
+    ADMIN: 2,
 };
 
 const MessageSender = {
-	USER: 0,
-	AI: 1,
-	ADMIN: 2,
+    USER: 0,
+    AI: 1,
+    ADMIN: 2,
 };
 
 // User Schema
 const UserSchema = new Schema({
-	_id: { type: String, required: true, unique: true },
-	name: { type: String, required: true },
-	logo: { type: String },
-	rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
-	hashedPassword: { type: String, required: true },
+    name: { type: String, required: true },
+    logo: { type: String },
+    rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
+    hashedPassword: { type: String, required: true },
 });
 
 // AI Schema
 const AISchema = new Schema({
-	_id: { type: String, required: true, unique: true },
-	name: { type: String, required: true },
-	logo: { type: String },
+    name: { type: String, required: true },
+    logo: { type: String },
 });
 
 // Room Schema
 const RoomSchema = new Schema({
-	_id: { type: String, required: true, unique: true },
-	name: { type: String, required: true },
-	members: [
-		{
-			user: { type: Schema.Types.ObjectId, ref: "User" },
-			access: { type: Number, enum: Object.values(RoomAccess), required: true },
-		},
-	],
-	chat_history: [{ type: Schema.Types.ObjectId, ref: "Message" }],
+    name: { type: String, required: true },
+    members: [
+        {
+            user: { type: Schema.Types.ObjectId, ref: "User" },
+            access: {
+                type: Number,
+                enum: Object.values(RoomAccess),
+                required: true,
+            },
+        },
+    ],
+    chat_history: [{ type: Schema.Types.ObjectId, ref: "Message" }],
 });
 
 // Message Schema
 const MessageSchema = new Schema({
-	_id: { type: String, required: true, unique: true },
-	sender: { type: Schema.Types.Mixed, required: true }, // Can be User or AI
-	senderType: {
-		type: Number,
-		enum: Object.values(MessageSender),
-		required: true,
-	},
-	content: { type: String, required: true },
-	createdAt: { type: Date, default: Date.now },
+    sender: { type: Schema.Types.Mixed, required: true }, // Can be User or AI
+    senderType: {
+        type: Number,
+        enum: Object.values(MessageSender),
+        required: true,
+    },
+    content: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now },
 });
 
 // Mongoose Models
