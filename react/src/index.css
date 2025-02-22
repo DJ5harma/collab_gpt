@@ -12,18 +12,3 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-input {
-    padding: 10px;
-    border: solid 1px;
-    border-radius: 5px;
-}
-button {
-    background-color: black;
-    color: white;
-    padding: 20px;
-    border-radius: 20px;
-}
-
-h2 {
-    font-size: 40px;
-}
