@@ -2,3 +2,4 @@ API_KEY = "abcd"
 PORT = 4000
 MONGO_URI = "mongodb+srv://<username>:<password>@cluster0.ddbxbyp.mongodb.net/collab_gpt?retryWrites=true&w=majority&appName=Cluster0"
 JWT_SECRET = "abcd"
+CLIENT_URL = "http://localhost:3000"

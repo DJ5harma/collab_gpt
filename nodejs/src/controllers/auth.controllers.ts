@@ -21,7 +21,6 @@ export const register_user = async (req: Request, res: Response) => {
             });
             return;
         }
-        return;
     } else {
         const svg = createAvatar(lorelei, {
             seed: name,
@@ -39,13 +38,18 @@ export const register_user = async (req: Request, res: Response) => {
         });
         user.save();
     }
+
+    const id = user._id.toString();
+
     const JWT_SECRET = process.env.JWT_SECRET!;
-    const token = jwt.sign(user._id.toString(), JWT_SECRET);
+    const token = jwt.sign(id, JWT_SECRET);
+
+    const { rooms, logo } = user;
 
     res.json({
         message: "You're in!",
         token,
-        user: { ...user, hashedPassword: undefined },
+        user: { id, name, logo, rooms },
     });
 };
 
@@ -55,6 +59,7 @@ export const auth_filter = async (
     next: NextFunction
 ) => {
     const { token } = req.cookies;
+
     if (!token) {
         res.json({
             error: "Auth token not found",
@@ -78,6 +83,7 @@ export const fill_user = async (
     next: NextFunction
 ) => {
     const { user_id } = req;
+    log(user_id);
     if (!user_id) {
         res.json({
             error: "User id not found",
@@ -92,6 +98,7 @@ export const fill_user = async (
         });
         return;
     }
+    // log(req.user);
 
     return next();
 };
